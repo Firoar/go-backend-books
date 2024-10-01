@@ -2,7 +2,6 @@ package Middlewares
 
 import (
 	"backend/Models"
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -31,8 +30,7 @@ func AuthMiddlewares() gin.HandlerFunc {
 		}
 
 		tokenString := tokenParts[1]
-		fmt.Println(tokenString, strings.Trim(tokenString, `"`))
-
+		
 		claims := &Models.Claims{}
 		token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 			return []byte(jwtSecret), nil
