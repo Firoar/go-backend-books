@@ -22,6 +22,7 @@ func AuthMiddlewares() gin.HandlerFunc {
 		}
 
 		tokenParts := strings.Split(authHeader, " ")
+
 		if len(tokenParts) != 2 || tokenParts[0] != "Bearer" {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"error": "Invalid token format",
@@ -30,7 +31,7 @@ func AuthMiddlewares() gin.HandlerFunc {
 		}
 
 		tokenString := tokenParts[1]
-		
+
 		claims := &Models.Claims{}
 		token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 			return []byte(jwtSecret), nil
@@ -42,6 +43,10 @@ func AuthMiddlewares() gin.HandlerFunc {
 			})
 			return
 		}
+
+		c.Set("email", claims.Email)
 		c.Next()
 	}
 }
+
+// "github.com/dgrijalva/jwt-go"
